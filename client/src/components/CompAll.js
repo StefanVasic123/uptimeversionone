@@ -159,8 +159,8 @@ class CompAll extends Component {
            .catch(err => console.log(err))
         } 
         */
-    this.axiosUpdate = () => { 
-            axios.put('http://localhost:5000/api/items/update', 
+    this.axiosUpdate = () => {  // Staviti samo api items update
+            axios.put('/api/items/update', 
         
                 { 'items': JSON.stringify(Object.entries(localStorage).map(item => item).filter(item => item !== undefined)) }
             )
