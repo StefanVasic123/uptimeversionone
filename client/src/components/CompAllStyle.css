@@ -1,0 +1,364 @@
+* {
+    box-sizing: border-box;
+}
+html, body {
+    height: 100%;
+}
+
+.component-rows {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+.desktop-row-5 {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.none {
+    display: none;
+}
+.column {
+    display: flex;
+    flex-direction: column;
+}
+.componentBTN {
+    padding: 1em 3em 1em 3em;
+    font-weight: bold;
+    font-size: 1.2em;
+    background-color: cyan;
+}
+.component-btn {
+    padding: 1em 3em 1em 3em;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.row-1 {
+    padding-bottom: 1em;
+}
+.row-2 {
+    padding-bottom: 1em;
+}
+.row-3 {
+    padding-bottom: 1em;
+}
+.row-4 {
+    padding-bottom: 1em;
+}
+.row-5 {
+    padding-bottom: 1em;
+}
+.row-6 {
+    padding-bottom: 1em;
+}
+.row-7 {
+    padding-bottom: 1em;
+}
+.row-8 {
+    padding-bottom: 1em;
+}
+.row-9 {
+    padding-bottom: 1em;
+}
+.row-10 {
+    padding-bottom: 1em;
+}
+.row-second-1 {
+    padding-bottom: 1em;
+}
+.row-second-2 {
+    padding-bottom: 1em;
+}
+.row-second-3 {
+    padding-bottom: 1em;
+}
+.row-second-4 {
+    padding-bottom: 1em;
+}
+.componentBTNYellow {
+    background-color: yellow;
+    padding: 1em 3em 1em 3em;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.componentBTNOrange {
+    background-color: orange;
+    padding: 1em 3em 1em 3em;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+.componentBTNGrey {
+    background-color: grey;
+    padding: 1em 3em 1em 3em;
+    font-weight: bold;
+    font-size: 1.2em;
+} 
+.overBTN {
+    background-color: red;
+    padding: 1em 3em 1em 3em;
+    font-weight: bold;
+    font-size: 1.2em;
+} 
+
+#admin-dash {
+    text-align: center;
+}
+.reports-centered {
+    display: flex;
+    justify-content: center;
+}
+#firstShift{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#secondShift{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#thirdShift{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.btn-column {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding-bottom: 1em;
+}
+.centered-c {
+    text-align: center;
+}
+.btn-h2 {
+    display: flex;
+    justify-content: center;
+    padding-bottom: 0.4em;
+}
+
+.main-btn {
+    cursor: pointer;
+    background-color: blue;
+    height: 90px;
+    color: white;
+    padding-bottom: 65px;
+}
+.main-btn:hover {
+    background-color: lightsteelblue !important;
+}
+.btn-payment:hover {
+    background-color: lightgreen !important;
+}
+.btn-open:hover {
+    background-color: lightpink !important;
+}
+.btn-all-day:hover {
+    background-color: lightgray !important;
+}
+.on-btn {
+    flex: 1;
+}
+.on-proceed {
+    display: flex;
+    flex-direction: row;  
+}
+.btn-proceed {
+    float: left;
+    width: 33.33%;
+    padding-bottom: 65px;
+}
+.on-proceed-btn {
+    flex: 1;
+}
+.on-back {
+   text-align: center;
+   margin-top: -1em;
+}
+.on-back-btn {
+    border-radius: 3px;
+}
+.on-back-btn:hover {
+    background-color: black;
+    color: white;
+}
+
+.payment-div-btn-proceed {
+    background-color: lightgreen;
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+.on-back-payment {
+    text-align: center;
+    margin-top: -1em;
+}
+.main-btn-input {
+    background-color: green;
+    height: 90px;
+    text-align: center;
+    font-weight: bold;
+}
+.main-btn-input-30 {
+    background-color: yellow;
+    height: 90px;
+    text-align: center;
+    font-weight: bold;
+}
+.main-btn-input-10 {
+    background-color: orange;
+    height: 90px;
+    text-align: center;
+    font-weight: bold;
+}
+.time-is-up {
+    background-color: red;
+    height: 90px;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+.main-input-details-btn {
+    margin-top: 5px;
+}
+
+.input-green {
+    background-color: green;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+}
+.input-orange {
+    background-color: orange;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+}
+.input-yellow {
+    background-color: yellow;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+}
+.open-start {
+    background-color: blue;
+    color: white;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 28px;
+    padding-bottom: 30px;
+    font-size: 1.3em;
+}
+.open-back {
+    text-align: center;
+    margin-top: -1em;
+    cursor: pointer;
+}
+.open-start-div {
+    background-color: purple;
+    color: black;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+}
+.open-details-div {
+    background-color: plum;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+}
+.details-back-btn {
+    text-align: center;
+    margin-top: -1em;
+    cursor: pointer;
+}
+.close-open-div {
+    background-color: palevioletred;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 0.8em;
+    color: black;
+}
+.close-open-btn {
+    text-align: center;
+    margin-top: -1em;
+    cursor: pointer;
+}
+.close-btn-open:hover {
+    background-color: purple !important;
+}
+.all-day-confirm {
+    background-color: cornflowerblue;
+    color: black;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 28px;
+    padding-bottom: 30px;
+    font-size: 1.3em;
+}
+.all-day-confirm-back-btn {
+    text-align: center;
+    margin-top: -1em;
+    cursor: pointer;
+}
+.all-day-confirmed {
+    background-color: royalblue;
+    height: 90px;
+    font-weight: bold;
+    text-align: center;
+}
+@media (max-width: 800px) {
+    .component-rows {
+        flex-direction: column;
+    }
+    .comp-div {
+        width: 100%;
+        padding-bottom: 1em;
+    }
+    .text-node {
+        font-size: 50%;
+    }
+    .text-node-btn-end {
+        padding-left: 40%;
+    }
+    .on-back-btn {
+        width: 50%;
+        height: 50%;
+        background-color: lightblue;
+    }
+    .text-node-btn {
+       visibility: hidden; 
+    }
+    .text-node-none {
+        display: none;
+    }
+    .componentBTN {
+        width: 100%;
+        padding: 2em 0 2em 0;
+    }
+    .component-btn {
+        width: 100%;
+        padding: 2em 0 2em 0;
+    }
+    .componentBTNYellow {
+        width: 100%;
+        padding: 2em 0 2em 0;
+    }
+    .componentBTNOrange {
+        width: 100%;
+        padding: 2em 0 2em 0;
+    }
+    .componentBTNGreen {
+        width: 100%;
+        padding: 2em 0 2em 0;
+    }
+    .overBTN {
+        width: 100%;
+        padding: 2em 0 2em 0;
+    }
+}
