@@ -33,7 +33,8 @@ class Comp extends Component {
             hasPassed: false,
             openComponent: false,
             compDidMount: false,
-            startMilis: ""
+            startMilis: "",
+            updating: false
         }
 
         const hourPrice = this.props.nmb < 100 ? localStorage.getItem("hourPrice") : localStorage.getItem("hourPriceSecond");
@@ -526,6 +527,26 @@ class Comp extends Component {
         }
     }
     componentDidUpdate() {
+     /*   if(this.state.updating) {
+            const addingToDB = () => {
+                const token = localStorage.getItem('token');
+                const config = {
+                    headers: {
+                        "Content-type": "application/json"
+                    }
+                }
+                config.headers['x-auth-token'] = token;  
+                console.log(config);
+                    axios.post('/api/users/update', {
+                    'id': localStorage.getItem('userId'), 
+                    'items': JSON.stringify(Object.entries(localStorage).map(item => item).filter(item => item !== undefined))
+            })
+                    .then(res => console.log(res))       
+                }
+            addingToDB();
+        }
+        */
+                 
         if(this.props.nmb < 100) {
             if(localStorage.getItem("propertiesAbsolute") === null) {
                 localStorage.setItem("propertiesAbsolute", null)
@@ -654,16 +675,17 @@ class Comp extends Component {
         console.log(toArr);
     }
     }
-/*    function uploadDB () {
-        axios.put('http://localhost:5000/api/items/update', 
-    
-            { 'items': JSON.stringify(Object.entries(localStorage).map(item => item).filter(item => item !== undefined)) }
-        )
-        .then(res => console.log(res));
-    }
-    uploadDB(); */
 }
     componentDidMount() {
+     /*   const updatingTimeout = () => {
+            setTimeout(() => {
+                this.setState({
+                    updating: !this.state.updating
+                })
+            }, 10000)
+        }
+        updatingTimeout();
+        */
         if(localStorage.getItem(this.props.nmb + "allDay") !== null) {
             this.setState({
                 main: !this.state.main,

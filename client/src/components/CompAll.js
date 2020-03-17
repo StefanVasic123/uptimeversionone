@@ -1,12 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import RGL, { WidthProvider } from 'react-grid-layout';
 import Comp from './Comp';
 import Chart from './Chart';
 import ChartSecond from './ChartSecond';
 import ChartR from './ChartR';
 import ChartR2 from './ChartR2';
+import RegisterModal from './RegisterModal';
+import LoginModal from './LoginModal';
+import CarouselModal from './CarouselModal';
 import './CompAllStyle.css';
-import { Container, Form, FormControl, InputGroup, ButtonToolbar, Button, Navbar, Nav } from 'react-bootstrap';
+import { Container, Form, FormControl, InputGroup, ButtonToolbar, Button, Navbar, Nav, Modal } from 'react-bootstrap';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import axios from 'axios';
@@ -59,7 +62,15 @@ class CompAll extends Component {
             draggable: false,
             compNmb: "",
             compNmbSec: "",
-            fromDB: ""
+            fromDB: "",
+            token: null,
+            isAuthenticated: false,
+            isLoading: false,
+            user: null,
+            userId: null,
+            registered: false,
+            logined: false,
+            logout: false
         }
 
     this.indexed = this.indexed.bind(this);
@@ -134,42 +145,207 @@ class CompAll extends Component {
             compNmbSec: event.target.value
         })
     }
-    this.axiosGet = () => { //when first log in, executes and change interface to real-time
-
-        axios 
-            .get('/api/items')
-            .then(res => {    
-            
-           console.log(res.data.map(item => item.items).filter(item => item !== undefined).forEach(el => el));
-            const go = res.data.map(item => item.items).filter(item => item !== undefined);
-            JSON.parse(go).forEach(el => localStorage.setItem(el[0], el[1]));        
+    this.registration = () => {
+        // staviti iz forme u state; dobija se i TOKEN res.token, mislim da je tako
+        let name = localStorage.getItem('registerName');
+        let email = localStorage.getItem('registerEmail');
+        let password = localStorage.getItem('registerPassword');
+        axios.post('/api/users', {
+            "name": name,
+            "email": email,
+            "password": password,
+            "items": "[]"
+        })
+        .then(res => {
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('registered', true);
+            this.setState({
+                registered: !this.state.registered
             })
-            
+            alert(`Welcome ${name}, now login with your email and password every time when you want to use UpTime with your account.`);
+        })
     }
- /*   this.axiosPost = () => { // send document of localStorage data to database (document) (set on one hour!) for restoring data
-        const newItem = {
-            name: "track",
-            items: JSON.stringify(Object.entries(localStorage).map(item => item).filter(item => item !== undefined))
+    this.login = async () => {
+        let email = localStorage.getItem('loginEmail');
+        let password = localStorage.getItem('loginPassword');
+        const config = {
+            headers: {
+                "Content-type": "application/json"
+            }
         }
-        axios.post('http://localhost:5000/api/items', newItem)
-            .then(res => {
-                console.log(res);
-                console.log(res.data);
-            })
-           .catch(err => console.log(err))
-        } 
-        */
-    this.axiosUpdate = () => {  // Staviti samo api items update
-            axios.put('/api/items/update', 
+                await axios.post('/api/auth', { 
+                    "email": email,
+                    "password": password
+                })
+                .then(res => {
+                    localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('userId', res.data.user.id);
+                    localStorage.setItem('logined', true);
+                    this.setState({
+                        logined: !this.state.logined
+                    })
+                })
+
+            const token = localStorage.getItem('token');
+
+            config.headers['x-auth-token'] = token;
+            axios.get('api/auth/user', config)
+                .then(res => {
+                    console.log("There IS TOKEN");
+                    JSON.parse(res.data.items).filter(item => item !== undefined).forEach(item => localStorage.setItem(item[0], item[1]))
+                    this.setState({
+                        userId: res.data._id
+                    });
+                    window.location.reload()
+                }) 
+                .catch(err => {
+                    console.log(err);
+                    console.log("There is no token!")
+                    this.setState({
+                        token: null,
+                        isAuthenticated: false,
+                        isLoading: false,
+                        user: null
+                    });
+                })
         
-                { 'items': JSON.stringify(Object.entries(localStorage).map(item => item).filter(item => item !== undefined)) }
-            )
-            .then(res => console.log(res));         
-  };
-    this.axiosDelete = () => {
-    /*    axios.delete('http://localhost:5000/api/items')
-            .then(res => console.log(res._id))
-*/
+        alert("Successful login!");
+        // send request and check for users 
+
+        // get token and authenticate
+    
+
+        // get error
+    }
+
+/*    this.loadUser = () => { 
+        const token = localStorage.getItem('token');
+
+        const config = {
+            headers: {
+                "Content-type": "application/json"
+            }
+        }
+
+        if(token) {
+            config.headers['x-auth-token'] = token;
+
+            axios.get('api/auth/user', config)
+                .then(res => {
+                    console.log(res.data);
+                    console.log("There IS TOKEN");
+                    localStorage.setItem('userId', res.data.id);
+                    console.log(res.data.items);
+                    console.log(JSON.parse(res.data.items).filter(item => item !== undefined).forEach(item => console.log(item[0], item[1])))
+                    JSON.parse(res.data.items).filter(item => item !== undefined).forEach(item => localStorage.setItem(item[0], item[1]))
+                    this.setState({
+                        userId: res.data._id
+                    })
+                    window.location.reload()
+                }) 
+                .catch(err => {
+                    console.log(err);
+                    console.log("There is no token!")
+                    this.setState({
+                        token: null,
+                        isAuthenticated: false,
+                        isLoading: false,
+                        user: null
+                    });
+                })
+            }
+        } */
+
+    this.logout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('updated');
+        localStorage.clear();
+        window.location.reload();
+    }
+    this.put = () => {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: {
+            "Content-type": "application/json"
+        }
+    }
+        config.headers['x-auth-token'] = token;  
+        console.log(config);
+            axios.post('/api/users/update', {
+            'id': localStorage.getItem('userId'), 
+            'items': JSON.stringify(Object.entries(localStorage).map(item => item).filter(item => item !== undefined))
+    })
+            .then(res => console.log(res))       
+        }
+
+    this.disable = () => {
+        let getAll = localStorage.getItem("properties");
+        let array = getAll.split(',');
+
+        let getAppPlus = localStorage.getItem("propertiesNow") !== null ? localStorage.getItem("propertiesNow") : "null"; // get added or print null if no added comp
+        let arrayPlus = getAppPlus.split(',');
+       
+        let arrayConcated = array.concat(arrayPlus); // concat with comp that already have comp class name 
+    
+
+        let arrayString = Array.from(new Set(arrayConcated)).filter((item) => item !== "null");
+        
+        let num = 0;
+        let maxVisible = Number(localStorage.getItem("propertiesMax")); //
+
+
+        arrayString.forEach(function(element) {
+       document.getElementById(element).style.pointerEvents = "none"; 
+        num++
+        })
+
+        // Second set disabled
+        let getAllSec = localStorage.getItem("propertiesSecond");
+        let arraySec = getAllSec.split(',');
+
+        if(localStorage.getItem("propertiesNowSecond") === null) {
+            localStorage.setItem("propertiesNowSecond", "null")
+        }
+
+        let getAllSecPlus = localStorage.getItem("propertiesNowSecond") !== null ? localStorage.getItem("propertiesNowSecond") : "null"; // get added or print null if no added comp
+        let arraySecPlus = getAllSecPlus.split(',');
+
+        let arraySecConcated = arraySec.concat(arraySecPlus);
+
+        let arrayStringSec = Array.from(new Set(arraySecConcated)).filter((item) => item !== "null");
+                    
+        let numSec = 0;
+        let maxVisibleSecond = Number(localStorage.getItem("propertiesMaxSecond")); 
+            
+        arrayStringSec.forEach(function(element) {
+            
+        document.getElementById(element).style.pointerEvents = "none";
+                            
+            numSec++
+        })
+    }
+    const authUser = () => { // akcije koje zavise od odgovora servera kada se REGISTRUJE
+        const loading = () => {
+            this.setState({
+                isLoading: true,
+            })
+        }
+        const loginSuccess = () => {
+            this.setState({
+               // token: res.token, RES IS NOT DEFINED
+                isAuthenticated: true,
+                
+            })
+        const logout = () => {
+            this.setState({
+                token: null,
+                user: null,
+                isAuthenticated: false,
+                isLoading: false
+            })
+        }
+        }
     }
         
     const hourPrice = localStorage.getItem("hourPrice");
@@ -1157,7 +1333,7 @@ class CompAll extends Component {
         saveToLS("layout", layout);
     }
 
-    componentDidUpdate() {     
+    componentDidUpdate() {    
         this.dailyReport();
         let getAll = localStorage.getItem("properties");
         let array = getAll.split(',');
@@ -1224,6 +1400,25 @@ class CompAll extends Component {
     } 
 
     componentDidMount() {
+        if(localStorage.getItem('registered')) {
+            this.setState({
+                registered: !this.state.registered
+            })
+        }
+        if(localStorage.getItem('logined')) {
+            this.setState({
+                logined: !this.state.logined,
+                logout: !this.state.logout
+            })
+        }
+        if(localStorage.getItem('registered') !== true && localStorage.getItem('logined') !== true) {
+            this.setState({
+                registered: !this.state.registered,
+                logined: !this.state.logined
+            })
+        }
+     
+     //   this.loadUser();
          /*   let maxVisibleLS = Number(localStorage.getItem("propertiesMax"));
             let maxVisibleSecondLS = Number(localStorage.getItem("propertiesMaxSecond"));
 
@@ -1443,8 +1638,13 @@ class CompAll extends Component {
         }
         return (
 <div style={{ margin: "0 5% 0 5%" }}>
-<button onClick={this.axiosGet}>Get</button>
-<button onClick={this.axiosUpdate}>Update</button>
+<button onClick={this.registration}>Registration</button>
+<button onClick={this.login}>Login</button>
+<button onClick={this.loadUser}>Load User</button>
+<button onClick={this.logout}>Logout</button>
+<button onClick={this.put}>Put</button>
+<button onClick={this.disable}>Disable</button>
+
   <Navbar sticky="top" bg="light" expand="lg">
   <Navbar.Brand onClick={this.mainNav} href="#main-nav">UpTime</Navbar.Brand>
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -1458,6 +1658,15 @@ class CompAll extends Component {
     <Nav pullRight>
         <Nav.Link onClick={this.adminNav} href="#admin-dash">Admin</Nav.Link>
         <Nav.Link onClick={this.howItWorksNav} href="#how-it-works">How It Works</Nav.Link>
+        {this.state.registered && (
+        <RegisterModal register={this.registration} />
+        )}
+        {this.state.logined && (
+        <LoginModal login={this.login} />
+        )}
+        {this.state.logout && (
+        <Nav.Link onClick={this.logout}>Logout</Nav.Link>
+        )}
     </Nav>
   </Navbar.Collapse>
 </Navbar>
@@ -2251,7 +2460,7 @@ class CompAll extends Component {
                     <hr />
 
             <div style={{ textAlign: "center", margin: "20px 0 20px 0" }}>
-                <Button variant="primary" onClick={() => {this.setState({ adminNav: !this.state.adminNav }); window.location.reload()}} style={{ cursor: "pointer", textAlign: "center", padding: "0.5em 2em 0.5em 2em" }}>Done</Button>
+                <Button variant="primary" onClick={() => {this.setState({ adminNav: !this.state.adminNav }); this.put(); window.location.reload()}} style={{ cursor: "pointer", textAlign: "center", padding: "0.5em 2em 0.5em 2em" }}>Done</Button>
             </div>
         </div>
         )}

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const auth = require('../../middleware/auth');
 
 // Item Model (to find, save)
 const Item = require('../../models/Item');
@@ -23,7 +24,7 @@ router.get('/', (req, res) => {
  //   const data = require('../../../mernapppractice/client/src/App').lsData;
 // @access  Public
 //prazno je jer je inside items call-a iz axios-a (localhost:5000/api/items)
-router.post('/', (req, res) => {
+router.post('/', auth, (req, res) => {
     const newItem = new Item({
      name: req.body.name,
      items: req.body.items
@@ -38,7 +39,7 @@ router.post('/', (req, res) => {
 
 // @access  Public
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth, (req, res) => {
     Item.findById(req.params.id) 
         .then(item => item.remove().then(() => res.json({success: true})))
         .catch(err => res.status(404).json({success: false}));
@@ -50,30 +51,7 @@ router.delete('/:id', (req, res) => {
 
 // @access Public
 
-//router.put('/', (req, res) => {
- /* router.route('/:id').put((req, res, next) => {
-    Item.findByIdAndUpdate(req.params.id, {
-        $set: req.body
-    }, (error, data) => {
-        if (error) {
-            return next(error);
-            console.log(error)
-        } else {
-            res.json(data)
-            console.log('User updated successfully !')
-        }
-    })
-}) */
-// MENJA SAMO ITEMS, a ne bira po imenu
-/*router.post("/update", (req, res) => {
-  const { name, update } = req.body;
-  Item.findOneAndUpdate(name, update, err => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
-  });
-});
-*/
-router.put('/update', (req, res) => {
+router.post('/update', (req, res) => {
   Item.findOneAndUpdate({ name: "track" },
     { $set: {
       items: req.body.items
